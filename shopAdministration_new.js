@@ -16,7 +16,7 @@ class ILogger {
 
 class IFileManager {
 	save(data) {}
-	load() {}
+	load(data, userManager) {}
 }
 
 class UserManager {
