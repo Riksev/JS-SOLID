@@ -20,29 +20,34 @@ class IFileManager {
 }
 
 class UserManager {
+	#users;
+	logger;
+	fileManager;
+
 	constructor() {
-			this.users = new Array();
+			this.#users = new Array();
 			this.logger = new Logger();
 			this.fileManager = new FileManager();
 	}
 
 	addUser(name, age) {
 			let user = new User(name, age);
-			this.users.push(user);
+			this.#users.push(user);
 			this.logger.log("User added: " + name);
-			this.fileManager.save(this.users);
+			this.fileManager.save(this.#users);
 	}
 
 	removeUser(name) {
-			this.users = this.users.filter(user => user.name !== name);
+			this.#users = this.#users.filter(user => user.getName() !== name);
 			this.logger.log("User removed: " + name);
-			this.fileManager.save(this.users);
+			this.fileManager.save(this.#users);
 	}
 
 	printUsers() {
 			const users = new Array();
-			this.users.forEach(user => {
+			this.#users.forEach(user => {
 				console.log(user.getInfo());
+				this.logger.log("Getting info for user: " + user.getName());
 				users.push(user.getInfo());
 			});
 			this.logger.log("Printed user list");
@@ -51,28 +56,39 @@ class UserManager {
 }
 
 class User {
+	#name;
+	#age;
+
 	constructor(name, age) {
-			this.name = name;
-			this.age = age;
-			this.logger = new Logger();
+			this.#name = name;
+			this.#age = age;
+	}
+
+	getName() {
+		return this.#name;
+	}
+
+	getAge() {
+		return this.#age;
 	}
 
 	getInfo() {
-			this.logger.log("Getting info for user: " + this.name);
-			return this.name + " (" + this.age + " years old)";
+			return this.getName() + " (" + this.getAge() + " years old)";
 	}
 }
 
 class Logger extends ILogger {
+	#logMessages;
+
 	constructor() {
 			super();
-			this.logMessages = new Array();
+			this.#logMessages = new Array();
 	}
 
 	log(message) {
 			let timestamp = new Date().toISOString();
 			let logMessage = timestamp + " - " + message;
-			this.logMessages.push(logMessage);
+			this.#logMessages.push(logMessage);
 			console.log(logMessage);
 	}
 
@@ -80,7 +96,7 @@ class Logger extends ILogger {
 			const startMessage = "Log messages:";
 			const messages = new Array(["Log messages:"]);
 			console.log(startMessage);
-			this.logMessages.forEach(message => {
+			this.#logMessages.forEach(message => {
 				console.log(message);
 				messages.push(message);
 			});
@@ -88,7 +104,7 @@ class Logger extends ILogger {
 	}
 
 	clearLog() {
-			this.logMessages = new Array();
+			this.#logMessages = new Array();
 			this.log("Log cleared");
 			return true;
 	}
