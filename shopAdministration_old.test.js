@@ -32,7 +32,7 @@ describe(
 					userManager.fileManager.loadUsersFromFile(fileData, userManager);
 					return userManager.logger.clearLog();
 				},
-				inString: "Test 'loading and removing users'",
+				inString: "Test 'clearing log'",
 				expected: true
 			},
 			{
@@ -42,7 +42,7 @@ describe(
 					userManager.fileManager.loadUsersFromFile(fileData, userManager);
 					return userManager.logger.printLog().split('\n').length;
 				},
-				inString: "Test 'loading and removing users'",
+				inString: "Test 'check log info'",
 				expected: 3
 			}
 		]
