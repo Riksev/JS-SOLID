@@ -103,19 +103,6 @@ class FileManager {
 	}
 }
 
-// Usage example
-// let userManager = new UserManager();
-// userManager.addUser("Alice", 30);
-// userManager.addUser("Bob", 25);
-// userManager.printUsers();
-// userManager.removeUser("Alice");
-// userManager.printUsers();
-
-// Simulate loading users from file data
-// let fileData = "Users: \nAlice (30 years old)\nBob (25 years old)\n";
-// userManager.fileManager.loadUsersFromFile(fileData, userManager);
-// userManager.printUsers();
-
 module.exports = {
 	UserManager
 }
