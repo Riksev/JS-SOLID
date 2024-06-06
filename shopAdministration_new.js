@@ -19,39 +19,50 @@ class IFileManager {
 	load(data, userManager) {}
 }
 
-class UserManager {
-	#users;
-	logger;
-	fileManager;
+
+class IUserRepository {
+	addUser(user) {}
+	removeUser(name) {}
+	printUsers() {}
+}
+
+class Logger extends ILogger {
+	#logMessages;
 
 	constructor() {
-			this.#users = new Array();
-			this.logger = new Logger();
-			this.fileManager = new FileManager();
+			super();
+			this.#logMessages = new Array();
 	}
 
-	addUser(name, age) {
-			let user = new User(name, age);
-			this.#users.push(user);
-			this.logger.log("User added: " + name);
-			this.fileManager.save(this.#users);
+	log(message) {
+			let timestamp = new Date().toISOString();
+			let logMessage = timestamp + " - " + message;
+			this.#logMessages.push(logMessage);
+			console.log(logMessage);
 	}
 
-	removeUser(name) {
-			this.#users = this.#users.filter(user => user.getName() !== name);
-			this.logger.log("User removed: " + name);
-			this.fileManager.save(this.#users);
-	}
-
-	printUsers() {
-			const users = new Array();
-			this.#users.forEach(user => {
-				console.log(user.getInfo());
-				this.logger.log("Getting info for user: " + user.getName());
-				users.push(user.getInfo());
+	getLog() {
+			const messages = new Array(["Log messages:"]);
+			this.#logMessages.forEach(message => {
+				messages.push(message);
 			});
-			this.logger.log("Printed user list");
-			return users.join('\n');
+			return messages.join('\n');
+	}
+
+	clearLog() {
+			this.#logMessages = new Array();
+			this.log("Log cleared");
+			return true;
+	}
+}
+
+class FileManager extends IFileManager {
+	save(data) {
+			console.log("Saving to file: \n" + data); // Simulate file saving
+	}
+
+	load(data) {
+			return data; // Simulate loading from a file
 	}
 }
 
@@ -77,61 +88,75 @@ class User {
 	}
 }
 
-class Logger extends ILogger {
-	#logMessages;
+class UserRepository extends IUserRepository {
+	#logger;
+	#fileManager;
+	#users;
 
-	constructor() {
+	constructor(logger, fileManager) {
 			super();
-			this.#logMessages = new Array();
+			this.#logger = logger;
+			this.#fileManager = fileManager;
+			this.#users = new Array();
 	}
 
-	log(message) {
-			let timestamp = new Date().toISOString();
-			let logMessage = timestamp + " - " + message;
-			this.#logMessages.push(logMessage);
-			console.log(logMessage);
+	addUser(user) {
+			this.#users.push(user);
+			this.#logger.log("User added: " + user.getName());
+			this.saveUsers();
 	}
 
-	printLog() {
-			const startMessage = "Log messages:";
-			const messages = new Array(["Log messages:"]);
-			console.log(startMessage);
-			this.#logMessages.forEach(message => {
-				console.log(message);
-				messages.push(message);
+	removeUser(name) {
+			this.#users = this.#users.filter(user => user.getName() !== name);
+			this.#logger.log("User removed: " + name);
+			this.saveUsers();
+	}
+
+	printUsers() {
+			const usersInfo = new Array();
+			this.#users.forEach(user => {
+				console.log(user.getInfo());
+				this.#logger.log("Getting info for user: " + user.getName());
+				usersInfo.push(user.getInfo());
 			});
-			return messages.join('\n');
+			this.#logger.log("Printed user list");
+			return usersInfo.join('\n');
 	}
 
-	clearLog() {
-			this.#logMessages = new Array();
-			this.log("Log cleared");
-			return true;
-	}
-}
-
-class FileManager extends IFileManager {
-	save(data) {
+	saveUsers() {
 			let fileData = "Users: \n";
-			data.forEach(user => {
+			this.#users.forEach(user => {
 					fileData += user.getInfo() + "\n";
 			});
-			console.log("Saving to file: \n" + fileData); // Simulate file saving
+			this.#fileManager.save(fileData);
 	}
 
-	load(data, userManager) {
-			let rows = data.split('\n');
-			rows.forEach(line => {
+	loadUsers(data) {
+			const content = this.#fileManager.load(data);
+			let lines = content.split('\n');
+			lines.forEach(line => {
 					if (line.startsWith("Users:")) return;
 					const [name, age] = line.replace(" years old", "").split(" (");
 					if (name && age) {
-							userManager.addUser(name, parseInt(age));
+							const user = new User(name, parseInt(age));
+							this.addUser(user);
 					}
 			});
+	}
+
+	showHistory() {
+		console.log(this.#logger.getLog());
+		return this.#logger.getLog();
+	}
+
+	clearHistory() {
+		return this.#logger.clearLog();
 	}
 }
 
 module.exports = {
-	UserManager
+	UserRepository,
+	FileManager,
+	Logger,
+	User
 }
-
