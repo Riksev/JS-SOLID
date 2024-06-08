@@ -7,6 +7,8 @@ const {
 
 describe("Check shop administration functionality", () => {
   let userRepository;
+  let logger;
+  let fileManager;
 
   const testCases = [
     {
@@ -34,7 +36,7 @@ describe("Check shop administration functionality", () => {
       function: () => {
         const data = "Users: \nAlice (30 years old)\nBob (25 years old)\n";
         userRepository.loadUsers(data);
-        return userRepository.clearHistory();
+        return logger.clearLog();
       },
       inString: "Test 'clearing log'",
       expected: true,
@@ -43,7 +45,7 @@ describe("Check shop administration functionality", () => {
       function: () => {
         const data = "Users: \nAlice (30 years old)\nBob (25 years old)\n";
         userRepository.loadUsers(data);
-        return userRepository.showHistory().split("\n").length;
+        return logger.getLog().split("\n").length;
       },
       inString: "Test 'check log info'",
       expected: 3,
@@ -51,8 +53,8 @@ describe("Check shop administration functionality", () => {
   ];
 
   beforeEach(() => {
-    const logger = new Logger();
-    const fileManager = new FileManager();
+    logger = new Logger();
+    fileManager = new FileManager();
     userRepository = new UserRepository(logger, fileManager);
   });
 

@@ -23,8 +23,8 @@ class Logger extends ILogger {
   }
 
   log(message) {
-    let timestamp = new Date().toISOString();
-    let logMessage = timestamp + " - " + message;
+    const timestamp = new Date().toISOString();
+    const logMessage = timestamp + " - " + message;
     this.#logMessages.push(logMessage);
     console.log(logMessage);
   }
@@ -46,12 +46,13 @@ class Logger extends ILogger {
 
 class IFileManager {
   save(data) {}
-  load(data, userManager) {}
+  load(data) {}
 }
 
 class FileManager extends IFileManager {
   save(data) {
     console.log("Saving to file: \n" + data); // Simulate file saving
+    return true;
   }
 
   load(data) {
@@ -140,16 +141,6 @@ class UserRepository extends IRepository {
         this.addUser(user);
       }
     });
-  }
-
-  showHistory() {
-    const history = this.#logger.getLog();
-    console.log(this.#logger.getLog());
-    return history;
-  }
-
-  clearHistory() {
-    return this.#logger.clearLog();
   }
 }
 
