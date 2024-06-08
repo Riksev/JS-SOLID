@@ -10,7 +10,7 @@
 
 class ILogger {
   log(message) {}
-  printLog() {}
+  getLog() {}
   clearLog() {}
 }
 
@@ -83,8 +83,8 @@ class User {
 }
 
 class IRepository {
-  showHistory() {}
-  clearHistory() {}
+  loadFrom(data) {}
+  printData() {}
 }
 
 class UserRepository extends IRepository {
@@ -111,7 +111,7 @@ class UserRepository extends IRepository {
     this.#saveUsers();
   }
 
-  printUsers() {
+  printData() {
     const usersInfo = new Array();
     this.#users.forEach((user) => {
       console.log(user.getInfo());
@@ -130,7 +130,7 @@ class UserRepository extends IRepository {
     this.#fileManager.save(fileData);
   }
 
-  loadUsers(data) {
+  loadFrom(data) {
     const content = this.#fileManager.load(data);
     let lines = content.split("\n");
     lines.forEach((line) => {

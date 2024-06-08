@@ -17,7 +17,7 @@ describe("Check shop administration functionality", () => {
         userRepository.addUser(userAlice);
         const userBob = new User("Bob", 25);
         userRepository.addUser(userBob);
-        return userRepository.printUsers();
+        return userRepository.printData();
       },
       inString: "Test 'adding users'",
       expected: "Alice (30 years old)\nBob (25 years old)",
@@ -25,9 +25,9 @@ describe("Check shop administration functionality", () => {
     {
       function: () => {
         const data = "Users: \nAlice (30 years old)\nBob (25 years old)\n";
-        userRepository.loadUsers(data);
+        userRepository.loadFrom(data);
         userRepository.removeUser("Alice");
-        return userRepository.printUsers();
+        return userRepository.printData();
       },
       inString: "Test 'loading and removing users'",
       expected: "Bob (25 years old)",
@@ -35,7 +35,7 @@ describe("Check shop administration functionality", () => {
     {
       function: () => {
         const data = "Users: \nAlice (30 years old)\nBob (25 years old)\n";
-        userRepository.loadUsers(data);
+        userRepository.loadFrom(data);
         return logger.clearLog();
       },
       inString: "Test 'clearing log'",
@@ -44,7 +44,7 @@ describe("Check shop administration functionality", () => {
     {
       function: () => {
         const data = "Users: \nAlice (30 years old)\nBob (25 years old)\n";
-        userRepository.loadUsers(data);
+        userRepository.loadFrom(data);
         return logger.getLog().split("\n").length;
       },
       inString: "Test 'check log info'",
