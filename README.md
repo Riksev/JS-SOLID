@@ -9,11 +9,14 @@ They are:
 
 # Content
 We have a few files here.<br />
+<br />
 For testing:<br />
 - shopAdministration_old.test.js<br />
 - shopAdministration_new.test.js<br />
+<br />
 For NPM:<br />
 - package.json<br />
+<br />
 For demonstration:<br />
 - shopAdministration_old.js<br />
 - shopAdministration_new.js<br />
