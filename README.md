@@ -10,13 +10,13 @@ They are:
 # Content
 We have a few files here.<br />
 For testing:<br />
-- shopAdministration_old.test.js
-- shopAdministration_new.test.js
+- shopAdministration_old.test.js<br />
+- shopAdministration_new.test.js<br />
 For NPM:<br />
-- package.json
+- package.json<br />
 For demonstration:<br />
-- shopAdministration_old.js
-- shopAdministration_new.js
+- shopAdministration_old.js<br />
+- shopAdministration_new.js<br />
 
 # Navigation
 How to navigate through tests and demonstration?<br />
